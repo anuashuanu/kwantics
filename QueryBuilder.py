@@ -6,16 +6,16 @@ import MySQLdb
 db = MySQLdb.connect(host='localhost', user='root', passwd='root', db='tiana')
 cursor = db.cursor()
 
-# Create exxpression.
+# Create exxpression..
 expression= "NOT(NOT(AND('six','four','tracking'),AND('will','spine')))"
 
 # Expression Reduce function.
 def reduce(expression):
     """
     This is main function which runs recursively,which break the expression
-    and stored all argument in list which call arg_list.
-    :param expression:
-    :return call_id:
+    and stores all arguments in list called arg_list.
+    expression: type String:
+    return: call_id List of call IDs String:
     """
     print('reduced called:')
     print(expression)
@@ -153,7 +153,7 @@ def AND_Query(arglist):
     """
     This function perform AND Operation.
     arglist : data item in List.
-    return : Call_id as data.
+    return : Call_id List.
     """
     line = "','".join(arglist)
     Data = "('" + line + "')"
@@ -166,7 +166,7 @@ def OR_Query(arglist):
     """
     This function perform OR Operation.
     arglist : data item in List.
-    return : Call_id as data.
+    return : Call_id List .
     """
     line = "','".join(arglist)
     Data = "('" + line + "')"
@@ -177,7 +177,7 @@ def OR_Query(arglist):
 def GetAll_Query():
     """
     This function perform ALL Operation.
-    return : ALL Call_id as data.
+    return : ALL Call_id in List.
     """
     Query = "select distinct FileName from jsoncallworddata"
     datalist=Get_Result(Query)
@@ -185,9 +185,9 @@ def GetAll_Query():
 
 def Get_Result(Query):
     """
-    This Function Execute query and return call_id.
-    Query: select * from TableName.
-    Return: call_id as output of Query.
+    This Function Execute mysql query and return call_id in List.
+    Query: 'select * from TableName' type string .
+    Return: call_id List as output of Query.
     """
     try:
         cursor.execute(Query)
@@ -207,7 +207,7 @@ def Get_Result(Query):
 
 #reduce function calling....
 data=reduce(expression)
-#Result stored in data variable.
+#Result stored in data variable in List.
 print('Final Result:',end=' ')
 print(len(data))
 print(data)
