@@ -7,7 +7,8 @@ db = MySQLdb.connect(host='localhost', user='root', passwd='root', db='tiana')
 cursor = db.cursor()
 
 # Create exxpression..
-expression= "NOT(NOT(AND('six','four','tracking'),AND('will','spine')))"
+expression= "NOT(AND(OR('six','four','tracking'),AND('will','spine')))"
+#expression="NOT(NOT('six'))"
 
 # Expression Reduce function.
 def reduce(expression):
