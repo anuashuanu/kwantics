@@ -44,9 +44,13 @@ def Main():
 
         Gender=str(SpeakerList[0][3])
         Speaker_ID=SpeakerList[0][2]
+        Vakta_Version=SpeakerList[0][4]
+        Age_Range=SpeakerList[0][5]
 
         UserInfo['Gender'] = Gender
         UserInfo['SpeakerID']=Speaker_ID
+        UserInfo['Vakta_Version'] = Vakta_Version
+        UserInfo['Age_Range']=Age_Range
 
         FileInfo[item] = UserInfo
 
@@ -71,6 +75,8 @@ def File_NomenClature(FileData):
         ID=Metadata['SpeakerID']
         Gender=Metadata['Gender']
         Path=Metadata['Path']
+        Age_Range=Metadata['Age_Range']
+        Vakta_Version=Metadata['Vakta_Version']
         CallVoiceList=Metadata['CallVoice']
         CallTextList = Metadata['CallText']
 
@@ -78,19 +84,39 @@ def File_NomenClature(FileData):
         VoiceExist=[x.split('.')[0] for x in CallVoiceList]
         # Extract Text File Name in List
         TextExist = [x.split('.')[0] for x in CallTextList]
+        TextExist=list(map(int, TextExist))
+        TextExist.sort()
 
         # File rename and file transfer action perform here.
         for i in TextExist:
-            if i in VoiceExist:
+            if str(i) in VoiceExist:
                 TextSrc=Path+'/callText/'+str(i)+'.txt'
-                VoiceSrc = Path + '/callVoice/' + str(i) + '.3gpp.txt'
-                TextFileName='H'+str(number)+'_S'+str(ID)+'_'+ Gender + '_' + str(i)+'.txt'
-                VoiceFileName = 'H' + str(number) + '_S' + str(ID) + '_' + Gender + '_' + str(i) + '.3gpp.txt'
+                VoiceSrc = Path + '/callVoice/' + str(i) + '.3gpp'
+                TextFileName='H'+str(number)+'_S'+str(ID)+'_'+ Gender+str(Age_Range) + '_V'+str(Vakta_Version)+'_' + str(i)+'.txt'
+                VoiceFileName = 'H' + str(number) + '_S' + str(ID) + '_' + Gender+str(Age_Range) + '_V'+str(Vakta_Version)+'_'+ str(i) + '.3gpp'
                 TextDestination=TextLocation+TextFileName
                 VoiceDestination = VoiceLocation + VoiceFileName
                 copyfile(TextSrc, TextDestination)
                 copyfile(VoiceSrc, VoiceDestination)
                 number+=1
+
+def wav_from_3gpp():
+    #wav_from_3gpp function convert 3gpp file into wav file.
+    #3gpp file address here.
+    fileAddress_3gpp='/home/kwantics/GitPractice/File_Format/AllFiles/callVoiceAll'
+    #AllFileList is list that contains all 3gpp file name
+    AllFileList=os.listdir(fileAddress_3gpp)
+
+    for item in AllFileList:
+        #extract file name and split from '.'
+        fileName=item.split('.')[0]
+        # create wav file Name.
+        waveFileName=fileName+'.wav'
+        #create command that convert 3gpp file into wav file.
+        command="ffmpeg -i " +fileAddress_3gpp+ "/"+item + " -c:a libmp3lame /home/kwantics/GitPractice/File_Format/AllFiles/callVoiceAllWavFile/" + waveFileName
+        print(command)
+        #Execution of command start here.
+        os.system(command)
 
 if __name__ == "__main__":
     #Program Start from here.Main Function is calling which return a dictionary.
@@ -100,4 +126,6 @@ if __name__ == "__main__":
     Name,Gender,SpeakerID,Path,TextFile(List),VoiceFile(List)
     """
     File_NomenClature(FileData)
+    #function wav_from_3gpp calling that convert all 3gpp file into wav file.
+    wav_from_3gpp()
     print('File nomenclature and rename all file transfer move successfully completed.')
