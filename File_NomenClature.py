@@ -113,8 +113,7 @@ def wav_from_3gpp():
         # create wav file Name.
         waveFileName=fileName+'.wav'
         #create command that convert 3gpp file into wav file.
-        command="ffmpeg -i " +fileAddress_3gpp+ "/"+item + " -c:a libmp3lame /home/kwantics/GitPractice/File_Format/AllFiles/callVoiceAllWavFile/" + waveFileName
-        print(command)
+        command = " ffmpeg -i " + fileAddress_3gpp + "/" + item + " -ac 1 -acodec pcm_s16le -ar 8000 /home/kwantics/GitPractice/File_Format/AllFiles/callVoiceAllWavFile/"+waveFileName
         #Execution of command start here.
         os.system(command)
 
